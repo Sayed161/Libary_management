@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block body %}
+<div class="col-6 d-flex">
+    <div class="card m-5" style="height:50vh;">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-body">
+                    <img src="{{books.image.url}}" alt="" style="height:40vh">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card-body fw-bold" style="padding-top:40px;font-family:'Noto Serif Traditional Chinese',sans sarif;font-size:24px">
+                    <h3 class="card-title ">Title : {{books.title}}</h3>
+                    {% for i  in books.category.all %}
+                    <h3 class="card-title">Category : {{i.name}}</h3>
+                    {% endfor %}
+                    <h3 class="card-title">Price : {{books.borrowing_price}}$</h3>
+                    <p class="card-text">Details : {{books.description}}</p>
+                    {% if user.is_authenticated %}
+                        {% if not books.is_borrowed  %}
+                            <a href="{% url "borrow" book_id=books.id %}" class="btn btn-warning fw-bold mt-5  text-light container" type="submit">Borrow</a>
+                        {% else  %}
+                            <a href="{% url "return_book" book_id=books.id %}" class="btn btn-danger fw-bold" type="submit">Borrowed</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+ <div class="card m-5">
+    <h3 class="p-3">Total Review : {{reviews|length}}</h3>
+        {% for com in reviews %}
+        <div class="card-body border m-3">
+        <h7><b>{{com.user.username}} </b>| {{com.created}}</h7>
+        <p class="pt-4">
+            {% for _ in "x"|ljust:com.star %}    
+        <i class="fa-solid fa-star" style="color: #ffd43b;"></i>
+        {% endfor %}
+    </p> 
+    </div>
+    {% endfor %}
+</div>
+
+{% if user.is_authenticated %}
+{% if books.is_borrowed %}
+<div class="card m-5">
+    <div class="card-body ">
+        <form method='post'>
+        <h1>Add Review</h1>
+        {% csrf_token %}
+        {{review_form|crispy}}
+        <button class="btn btn-danger" type="submit">Review</button>
+        </form>
+      
+    </div>
+  </div> 
+  {% endif %}
+  {% endif %}
+
+{% endblock body %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %} 
+{% block title %}The Reader's Planet{% endblock %}
+{% block body %}
+
+<div class="row container"style="margin-left:100px;margin-top:30px">
+    <div class="col-sm-8 mb-3 mb-sm-0 position-relative">
+        <img src="{% static "books.jpg" %}" alt="" style="width:770px;height:350px;position: absolute;">
+        <h1 style="color: white; font-family: 'Carattere', cursive; font-size: 59px;position: absolute;margin-top:100px">Browse Our Books</h1>
+    </div>
+    <div class="col-sm-4 mb-3 mb-sm-0">
+        <h1 style="color: black; font-family: 'Dancing Script', Sans Serif; font-size: 49px;  ">Catagories</h1> 
+        <hr>
+        <div style="font-family: 'Kalam', Sans Serif; font-size:20px;margin-top:20px">
+        {% for cat in category %}
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="category"id="{{cat.id}}">
+      <label class="form-check-label" for="{{cat.id}}">
+       <a href="{%url 'category' cat.slug%}" style="text-decoration:none;color:black;">{{cat}}</a> 
+      </label>  
+    </div>
+    {% endfor %}
+</div>
+    </div>
+
+    <div class="col-10"style="margin-top:190px">
+        <div class="d-flex flex-wrap gap-3">
+          <h3 class="container">{{data|length}} result found</h3>
+          {% for item in data %}
+          <div class="col-sm-3 mb-3 mb-sm-0">
+           <div class="card">
+             <div class="card-body">
+              <img style="width:350px;" src="{{item.image.url}}" alt="">
+              <h5 class="card-title fw-bold"><a href="{%url 'details' id=item.id  %}" style="text-decoration:none;color:black">{{item.title}}</a></h5>
+               <p class="card-text"> Description : {{item.description| truncatewords:6}}</p>
+               <p>Category: {% for p in item.category.all %}
+                   <button class='btn btn-warning btn-sm m-2'>{{p.name}}</button>
+                   {% endfor %}</p>
+             </div>
+           </div>
+         </div>
+          
+          {% endfor %}
+</div>
+
+{% endblock body %}
