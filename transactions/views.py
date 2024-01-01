@@ -67,12 +67,8 @@ class BorrowingView(LoginRequiredMixin,View):
                 books.save()
 
 
-                Borrow_book.objects.create(
-                    user_account=account,
-                    book=books,
-                    transactions_type=BORROW,
-                    timestamp=datetime.now(),
-                )
+                borrowed, created = Borrow_book.objects.get_or_create(user_account=account,book=books,transactions_type=BORROW,
+                    timestamp=datetime.now(),)
                 return redirect ("report")
             else:
                 messages.error(self.request,f"You don't have enough money to pay the loan")
@@ -92,12 +88,8 @@ class ReturnView(LoginRequiredMixin,View):
                 books.is_borrowed = False
                 books.save()
 
-                Borrow_book.objects.create(
-                    user_account=account,
-                    book=books,
-                    transactions_type=RETURN,
-                    timestamp=datetime.now(),
-                )
+                borrowed, created = Borrow_book.objects.get_or_create(user_account=account,book=books,transactions_type=RETURN,
+                    timestamp=datetime.now(),)
 
 
                 return redirect ("report")
