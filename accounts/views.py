@@ -2,10 +2,12 @@ from django.shortcuts import render,redirect
 from django.views.generic import FormView
 from . forms import UserRegistrationForm,UserProfileUpdate
 from django.contrib.auth import login,logout
+from django.contrib import messages
 from django.contrib.auth.views import LoginView,LogoutView
 from django.views import View
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 # Create your views here. 
 
 class userRegistrationview(FormView):
@@ -26,11 +28,11 @@ class UserLoginView(LoginView):
         return reverse_lazy('home')
     
 
-class Logout(LoginRequiredMixin,LogoutView):
-    def get_success_url(self):
-        if self.request.user.is_authenticated:
-            logout(self.request)
-        return reverse_lazy('home')
+@login_required
+def LogOut(request):
+    logout(request)
+    messages.success(request, "Logged Out Successfully")
+    return redirect('home')
     
 
 class profile(LoginRequiredMixin,View):
