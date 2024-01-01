@@ -63,7 +63,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+CSRF_TRUSTED_ORIGINS = ['https://the-readers-planet.onrender.com',"https://*.127.0.0.1"]
 ROOT_URLCONF = 'Readers_planet.urls'
 
 TEMPLATES = [
